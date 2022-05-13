@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "scheme": "com.swiftycompanion"
   },
   "name": "Swifty-Companion"
 }
