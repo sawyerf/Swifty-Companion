@@ -1,12 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
+import ProjectList from '../components/ProjectList';
 
 const Profil = ({ navigation, route }) => {
     const [user, setUser] = React.useState();
-    const [level, setLevel] = React.useState(0);
+    const [userCursus, setUserCursus] = React.useState(0);
     const [levelP, setLevelP] = React.useState('10%');
 
     React.useEffect(() => {
@@ -16,25 +17,24 @@ const Profil = ({ navigation, route }) => {
     })
 
     React.useEffect(() => {
-        if (!level) {
-            getLevel();
+        if (!userCursus) {
+            getCursus();
         }
     }, [user])
 
     const getUser = async () => {
         const res_user = await api.get('/v2/users/' + route.params.uid)
         if (res_user) {
-            await setUser(res_user);
-            // console.log('users', JSON.stringify(res_user));
+            setUser(res_user);
         }
     }
 
-    const getLevel = () => {
+    const getCursus = () => {
         if (user?.cursus_users?.length > 0) {
             for (const cursus of user.cursus_users) {
                 if (cursus.cursus_id == 21) {
-                    setLevel(cursus.level);
-                    setLevelP(levelToP(cursus.level))
+                    setUserCursus(cursus);
+                    setLevelP(levelToP(cursus.level));
                     return cursus;
                 }
             }
@@ -60,25 +60,46 @@ const Profil = ({ navigation, route }) => {
                         uri: user?.image_url
                     }}
                 />
-                <Text>
-                    {user?.displayname}
-                </Text>
+                <View>
+                    <Text style={{fontWeight: 'bold'}}>
+                        {user?.displayname}
+                    </Text>
+                    <Text>
+                        @{user?.login}
+                    </Text>
+                </View>
             </View>
-            <View>
-                <Text>
-                    {"📍 "}{user?.campus[0]?.name}
-                </Text>
-                <Text>
-                    {"☎️ "}{user?.phone}
-                </Text>
-                <Text>
-                    {"📮 "}{user?.email}
-                </Text>
+            <View style={{ width: '100%', paddingVertical: 10, paddingHorizontal: 13, backgroundColor: '#ffffff', marginBottom: 7 }}>
+                <View style={{ flexDirection: 'row', marginBottom: 4 }}>
+                    <Text>
+                        {"📍 "}{user?.campus[0]?.name}
+                    </Text>
+                    <Text style={{ marginLeft: 'auto', textAlign: 'center' }}>
+                        {"🪙 "}{user?.correction_point}
+                    </Text>
+                    <Text style={{ marginLeft: 'auto' }}>
+                        {"🏊 "}{user?.pool_month} {user?.pool_year}
+                    </Text>
+                </View>
+                <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                    <Text>
+                        {"☎️ "}{user?.phone}
+                    </Text>
+                    <Text style={{ marginLeft: 'auto' }}>
+                        {"📮 "}{user?.email}
+                    </Text>
+                </View>
             </View>
-            <View style={{width:'100%', height: 40, backgroundColor:'grey'}}>
-                <View style={{backgroundColor: 'black', width: levelP, height: '100%'}}></View>
-                    <Text> {level} {levelP} </Text>
+            <View style={{ width: '97%', height: 40, backgroundColor: '#ececec', borderRadius: 13, marginHorizontal: 'auto', marginBottom: 7 }}>
+                <View style={{ backgroundColor: '#c5c5c5', width: levelP, height: '100%', borderTopStartRadius: 13, borderBottomLeftRadius: 13 }} />
+                <Text style={{ width: '100%', height: '100%', position: 'absolute', textAlign: 'center', textAlignVertical: 'center' }}>{userCursus?.level}</Text>
             </View>
+            <ScrollView
+                style={{ backgroundColor: '#f6f6f6', height: 200 }}
+                horizontal={true}
+            >
+                <ProjectList projects={user?.projects_users} />
+            </ScrollView>
             <StatusBar style="auto" />
         </View>
     );
@@ -87,32 +108,24 @@ const Profil = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f1f1f1',
         alignItems: 'center',
-        padding: 10
+        paddingVertical: 10
     },
     conTop: {
         flexDirection: 'row',
         width: '100%',
-        backgroundColor: 'red',
+        backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: 10
+        padding: 10,
+        margin: 5
     },
     profilImage: {
         width: 100,
         height: 100,
         borderRadius: 100 / 2,
         marginRight: 10
-    },
-    input: {
-        height: 40,
-        width: 120,
-        margin: 5,
-        padding: 10,
-        borderWidth: 1,
-        textAlign: 'center',
-        borderRadius: 7
     },
 });
 

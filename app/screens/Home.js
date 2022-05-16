@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } from 'expo-auth-session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../utils/api';
 
 import { API_UID, API_SECRET, RANDOM_USER } from '@env';
-
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,7 +15,8 @@ const discovery = {
 }
 
 const Home = ({ navigation, route }) => {
-    const [code, setCode] = React.useState('rien');
+    const [code, setCode] = React.useState();
+    const [token, setToken] = React.useState();
 
     const [request, response, promptAsync] = useAuthRequest(
         {
@@ -29,10 +30,41 @@ const Home = ({ navigation, route }) => {
     );
 
     React.useEffect(() => {
-        console.log('res', response);
+        const getData = async () => {
+            try {
+                const valueCode = await AsyncStorage.getItem('code')
+                const valueToken = await AsyncStorage.getItem('token')
+                if (valueCode !== null) {
+                    setCode(valueCode);
+                }
+                if (valueToken !== null) {
+                    setToken(valueToken);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        getData()
+    });
+
+    React.useEffect(() => {
+        if (!code) {
+            promptAsync();
+            setToken(undefined);
+            AsyncStorage.setItem('token', undefined)
+        }
+        if (!token) {
+            api.getToken(code);
+        }
+        if (code && token) {
+            navigation.navigate('Profil', { uid: RANDOM_USER });
+        }
+    }, [code, token])
+
+    React.useEffect(() => {
         if (response?.type === 'success') {
             setCode(response.params.code);
-            console.log('res', response);
+            AsyncStorage.setItem('code', response.params.code);
             console.log('code', code);
         }
     }, [response]);
@@ -44,6 +76,9 @@ const Home = ({ navigation, route }) => {
             </Text>
             <Text>
                 {code}
+            </Text>
+            <Text>
+                {token}
             </Text>
             <Button
                 disabled={!request}

@@ -1,8 +1,23 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { API_UID, API_SECRET } from '@env';
 
 axios.defaults.baseURL = 'https://api.intra.42.fr/';
+
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('token')
+        if (value !== null) {
+            axios.defaults.headers.common["Authorization"] = 'Bearer ' + value;
+            console.log('Set save Token');
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+getData();
 
 const getToken = async (code) => {
     let res;
@@ -23,6 +38,7 @@ const getToken = async (code) => {
     const token = res.data.access_token;
     console.log('token', token);
     axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
+    AsyncStorage.setItem('token', token);
     return token;
 }
 
