@@ -18,12 +18,12 @@ const Project = (props) => {
     }
 
     return (
-        <View onTouchStart={getProject} style={{ width: 200, padding: 12, marginLeft: 10, backgroundColor: 'white' }}>
+        <View style={{ width: 200, padding: 12, marginLeft: 10, backgroundColor: 'white' }}>
             <Text style={{ position: 'relative', fontWeight: 'bold' }}>{props?.project?.project?.name}</Text>
             <Text style={{ position: 'relative' }} numberOfLines={3}>{projectInfo?.project_sessions[0]?.description}</Text>
             <View style={{ position: 'relative', marginTop: 'auto', flexDirection: 'row' }}>
                 <Text>{'⭐ '}{props?.project?.final_mark}</Text>
-                <Text style={{ position: 'relative', marginStart: 'auto' }}>{projectInfo ? "⏱️ ": "➕"} {projectInfo?.project_sessions[0]?.estimate_time}</Text>
+                <Text onTouchStart={getProject} style={{ position: 'relative', marginStart: 'auto' }}>{projectInfo ? "⏱️ ": "➕"} {projectInfo?.project_sessions[0]?.estimate_time}</Text>
             </View>
         </View>
     )

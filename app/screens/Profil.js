@@ -53,54 +53,57 @@ const Profil = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.conTop}>
-                <Image
-                    style={styles.profilImage}
-                    source={{
-                        uri: user?.image_url
-                    }}
-                />
-                <View>
-                    <Text style={{fontWeight: 'bold'}}>
-                        {user?.displayname}
-                    </Text>
-                    <Text>
-                        @{user?.login}
-                    </Text>
+            <ScrollView>
+                <View style={styles.conTop}>
+                    <Image
+                        style={styles.profilImage}
+                        source={{
+                            uri: user?.image_url
+                        }}
+                    />
+                    <View>
+                        <Text style={{ fontWeight: 'bold' }}>
+                            {user?.displayname}
+                        </Text>
+                        <Text>
+                            @{user?.login}
+                        </Text>
+                    </View>
                 </View>
-            </View>
-            <View style={{ width: '100%', paddingVertical: 10, paddingHorizontal: 13, backgroundColor: '#ffffff', marginBottom: 7 }}>
-                <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-                    <Text>
-                        {"📍 "}{user?.campus[0]?.name}
-                    </Text>
-                    <Text style={{ marginLeft: 'auto', textAlign: 'center' }}>
-                        {"🪙 "}{user?.correction_point}
-                    </Text>
-                    <Text style={{ marginLeft: 'auto' }}>
-                        {"🏊 "}{user?.pool_month} {user?.pool_year}
-                    </Text>
+                <View style={{ width: '100%', paddingVertical: 10, paddingHorizontal: 13, backgroundColor: '#ffffff', marginBottom: 7 }}>
+                    <View style={{ flexDirection: 'row', marginBottom: 4 }}>
+                        <Text>
+                            {"📍 "}{user?.campus[0]?.name}
+                        </Text>
+                        <Text style={{ marginLeft: 'auto', textAlign: 'center' }}>
+                            {"🪙 "}{user?.correction_point}
+                        </Text>
+                        <Text style={{ marginLeft: 'auto' }}>
+                            {"🏊 "}{user?.pool_month} {user?.pool_year}
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                        <Text>
+                            {"☎️ "}{user?.phone}
+                        </Text>
+                        <Text style={{ marginLeft: 'auto' }}>
+                            {"📮 "}{user?.email}
+                        </Text>
+                    </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: 4 }}>
-                    <Text>
-                        {"☎️ "}{user?.phone}
-                    </Text>
-                    <Text style={{ marginLeft: 'auto' }}>
-                        {"📮 "}{user?.email}
-                    </Text>
+                <View style={{ width: '100%', height: 40, paddingHorizontal: 10, marginHorizontal: 'auto', alignItems: 'center', marginBottom: 7 }}>
+                    <View style={{ backgroundColor: '#e2e2e2', position: 'absolute', width: '100%', height: '100%', borderRadius: 13 }} />
+                    <View style={{ backgroundColor: '#c5c5c5', position: 'absolute', width: levelP, height: '100%', borderTopStartRadius: 13, borderBottomStartRadius: 13, left: 10 }} />
+                    <Text style={{ width: '100%', height: '100%', position: 'absolute', textAlign: 'center', textAlignVertical: 'center' }}>{userCursus?.level}</Text>
                 </View>
-            </View>
-            <View style={{ width: '97%', height: 40, backgroundColor: '#ececec', borderRadius: 13, marginHorizontal: 'auto', marginBottom: 7 }}>
-                <View style={{ backgroundColor: '#c5c5c5', width: levelP, height: '100%', borderTopStartRadius: 13, borderBottomLeftRadius: 13 }} />
-                <Text style={{ width: '100%', height: '100%', position: 'absolute', textAlign: 'center', textAlignVertical: 'center' }}>{userCursus?.level}</Text>
-            </View>
-            <ScrollView
-                style={{ backgroundColor: '#f6f6f6', height: 200 }}
-                horizontal={true}
-            >
-                <ProjectList projects={user?.projects_users} />
+                <ScrollView
+                    style={{ height: 150 }}
+                    horizontal={true}
+                >
+                    <ProjectList projects={user?.projects_users} />
+                </ScrollView>
+                <StatusBar style="auto" />
             </ScrollView>
-            <StatusBar style="auto" />
         </View>
     );
 }
