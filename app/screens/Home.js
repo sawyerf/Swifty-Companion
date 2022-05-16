@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } from 'expo-auth-session';
-import { getToken } from '../utils/api';
+import api from '../utils/api';
 
-import { API_UID, API_SECRET } from '@env';
+import { API_UID, API_SECRET, RANDOM_USER } from '@env';
+
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -33,8 +34,6 @@ const Home = ({ navigation, route }) => {
             setCode(response.params.code);
             console.log('res', response);
             console.log('code', code);
-            getToken(code);
-            navigation.navigate('Profil');
         }
     }, [response]);
 
@@ -50,6 +49,14 @@ const Home = ({ navigation, route }) => {
                 disabled={!request}
                 title="Connect"
                 onPress={() => { promptAsync(); }}
+            />
+            <Button
+                title="Get Token"
+                onPress={async () => { await api.getToken(code); }}
+            />
+            <Button
+                title="Profil"
+                onPress={() => { navigation.navigate('Profil', { uid: RANDOM_USER }); }}
             />
         </View>
     );

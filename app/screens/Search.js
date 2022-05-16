@@ -1,13 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import api from '../utils/api';
 
 const Search = ({navigation}) => {
     const [search, onChangeSearch] = React.useState("des barres");
+    const [user, setUser] = React.useState();
 
     const onPressSearch = () => {
         navigation.navigate('Profil', {user: search});
     }
+
+    const searchUser = () => {
+        // const users = await api.get('/v2/users', {
+        //     params: {
+        //         'filter[login]': route.params.user
+        //     }
+        // });
+    }
+
+    const getMe = async () => {
+        if (!user) {
+            setUser(await api.get('/v2/me'));
+        }
+    }
+
+    React.useEffect(() => {
+        getMe();
+    })
 
     return (
         <View style={styles.container}>
@@ -15,11 +35,12 @@ const Search = ({navigation}) => {
                 style={styles.input}
                 onChangeText={onChangeSearch}
                 value={search}
+                onSubmitEditing={onPressSearch}
             />
-            <Button
-                title="Search"
-                onPress={onPressSearch}
-            />
+            <Text>
+                {user?.displayname}
+
+            </Text>
             <StatusBar style="auto" />
         </View>
     );
@@ -29,13 +50,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 5,
     },
     input: {
         height: 40,
-        width: 120,
-        margin: 5,
+        width: '100%',
         padding: 10,
         borderWidth: 1,
         textAlign: 'center',

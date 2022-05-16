@@ -16,7 +16,10 @@ export default function App() {
         <Stack.Screen
           name="Search"
           component={Search}
-          options={{ title: 'Search' }}
+          options={{
+            title: 'Search',
+            headerLeft: () => <></>,
+          }}
         />
         <Stack.Screen name="Profil" component={Profil} />
       </Stack.Navigator>
