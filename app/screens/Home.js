@@ -21,7 +21,7 @@ const Home = ({ navigation, route }) => {
     const [request, response, promptAsync] = useAuthRequest(
         {
             clientId: API_UID,
-            scopes: ['public'],
+            scopes: ['public', 'projects'],
             redirectUri: makeRedirectUri({
                 native: 'com.swiftycompanion://oauth'
             })
@@ -44,20 +44,20 @@ const Home = ({ navigation, route }) => {
             console.log('Check Code 1');
             if (!code) {
                 const res = await getStorage('code');
+                console.log('setCode', res);
                 if (res) {
                     setCode(res);
                     return;
                 }
             }
-            if (code && !await api.checkToken()) {
-                console.log('Cleat bir')
-                await AsyncStorage.removeItem('token');
-                if (token === undefined) {
-                    setToken(null);
-                } else {
-                    setToken(undefined);
-                }
-            }
+            // if (code && !await api.checkToken()) {
+            //     await AsyncStorage.removeItem('token');
+            //     if (token === undefined) {
+            //         setToken(null);
+            //     } else {
+            //         setToken(undefined);
+            //     }
+            // }
         }
         checkCode();
     }, [code])
@@ -68,6 +68,7 @@ const Home = ({ navigation, route }) => {
             if (!token) {
                 const res = await getStorage('token');
                 if (res) {
+                    console.log('setToken', res);
                     setToken(res);
                     return;
                 }
@@ -88,7 +89,7 @@ const Home = ({ navigation, route }) => {
             }
         }
         checkToken();
-    }, [token])
+    }, [token, code])
 
     React.useEffect(() => {
         const getReponse = async () => {
@@ -119,10 +120,17 @@ const Home = ({ navigation, route }) => {
                 title="Connect"
                 onPress={async () => { await promptAsync() }}
             />
-            {/* <Button
+            <Button
                 title="Get Token"
                 onPress={async () => { await api.getToken(code); }}
-            /> */}
+            />
+            <Button
+                title="Refresh Token"
+                onPress={async () => {
+                    const refreshToken = await AsyncStorage.getItem('refresh_token');
+                    await api.upToken(refreshToken);
+                }}
+            />
             <Button
                 title="Profil"
                 onPress={() => { navigation.navigate('Profil', { uid: RANDOM_USER }); }}

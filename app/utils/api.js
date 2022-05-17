@@ -42,7 +42,7 @@ const checkToken = async () => {
 
 const getToken = async (code) => {
     let res;
-    
+
     console.log('Get Token');
     try {
         res = await axios.post('/oauth/token',
@@ -61,8 +61,45 @@ const getToken = async (code) => {
     }
     const token = res.data.access_token;
     console.log('token', token);
+    console.log(res?.data)
     axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
-    AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('refresh_token', res?.data?.refresh_token);
+    return token;
+}
+
+const upToken = async (refreshToken) => {
+    let res;
+
+    console.log('Refresh Token');
+    console.log({
+        grant_type: 'refresh_token',
+        client_id: API_UID,
+        client_secret: API_SECRET,
+        refresh_token: refreshToken,
+        redirect_uri: 'com.swiftycompanion://oauth'
+    });
+    try {
+        res = await axios.post('/oauth/token',
+            {
+                grant_type: 'refresh_token',
+                client_id: API_UID,
+                client_secret: API_SECRET,
+                refresh_token: refreshToken,
+                redirect_uri: 'com.swiftycompanion://oauth'
+            }
+        );
+    } catch (error) {
+        console.log('error:', 'refreshToken', ':', error);
+        console.log(error?.response?.data)
+        return null;
+    }
+    const token = res.data.access_token;
+    console.log('token', token);
+    console.log(res?.data)
+    axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('refresh_token', res?.data?.refresh_token);
     return token;
 }
 
@@ -74,10 +111,11 @@ const get = async (url, params) => {
     } catch (error) {
         console.log('error', error);
         console.log(error?.response?.data)
-        if (error?.response?.data?.message == 'The access token expired') {
-            const code = await AsyncStorage.getItem('code');
-            if (getToken(code)) {
-                return get(url, params);
+        console.log(error?.response?.status);
+        if (error?.response?.status === 401) {
+            const refreshToken = await AsyncStorage.getItem('refresh_token');
+            if (await upToken(refreshToken)) {
+                return await get(url, params);
             }
         }
         return null;
@@ -90,4 +128,5 @@ export default {
     getToken,
     get,
     checkToken,
+    upToken,
 }

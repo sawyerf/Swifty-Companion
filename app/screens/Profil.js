@@ -98,8 +98,7 @@ const Profil = ({ navigation, route }) => {
                 </View>
                 <ScrollView
                     style={{ height: 150 }}
-                    horizontal={true}
-                >
+                    horizontal={true}>
                     <ProjectList projects={user?.projects_users} />
                 </ScrollView>
                 <SkillList skill={userCursus}/>
