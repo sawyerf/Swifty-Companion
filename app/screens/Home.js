@@ -48,7 +48,6 @@ const Home = ({ navigation, route }) => {
                     setCode(res);
                     return;
                 }
-                // await promptAsync();
             }
             if (code && !await api.checkToken()) {
                 console.log('Cleat bir')
@@ -124,10 +123,10 @@ const Home = ({ navigation, route }) => {
                 title="Get Token"
                 onPress={async () => { await api.getToken(code); }}
             /> */}
-            {/* <Button
+            <Button
                 title="Profil"
                 onPress={() => { navigation.navigate('Profil', { uid: RANDOM_USER }); }}
-            /> */}
+            />
             <Button
                 title="Clear"
                 onPress={() => {

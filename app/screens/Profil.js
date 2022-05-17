@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
 import ProjectList from '../components/ProjectList';
+import SkillList from '../components/SkillList';
 
 const Profil = ({ navigation, route }) => {
     const [user, setUser] = React.useState();
@@ -49,7 +50,6 @@ const Profil = ({ navigation, route }) => {
         }
         return String(((levelI % 1) * 100)) + '%';
     }
-
 
     return (
         <View style={styles.container}>
@@ -102,6 +102,7 @@ const Profil = ({ navigation, route }) => {
                 >
                     <ProjectList projects={user?.projects_users} />
                 </ScrollView>
+                <SkillList skill={userCursus}/>
                 <StatusBar style="auto" />
             </ScrollView>
         </View>

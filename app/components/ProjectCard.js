@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
 
-const Project = (props) => {
+const ProjectCard = (props) => {
     const [projectInfo, setProjectInfo] = React.useState();
 
     const getProject = async () => {
@@ -18,7 +18,7 @@ const Project = (props) => {
     }
 
     return (
-        <View style={{ width: 200, padding: 12, marginLeft: 10, backgroundColor: 'white' }}>
+        <View style={{ width: 200, padding: 12, marginLeft: 10, backgroundColor: 'white', borderRadius: 5 }}>
             <Text style={{ position: 'relative', fontWeight: 'bold' }}>{props?.project?.project?.name}</Text>
             <Text style={{ position: 'relative' }} numberOfLines={3}>{projectInfo?.project_sessions[0]?.description}</Text>
             <View style={{ position: 'relative', marginTop: 'auto', flexDirection: 'row' }}>
@@ -29,4 +29,4 @@ const Project = (props) => {
     )
 }
 
-export default Project;
+export default ProjectCard;

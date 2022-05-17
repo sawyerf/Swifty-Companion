@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 're
 import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
-import Project from './Project';
+import ProjectCard from './ProjectCard';
 
 const ProjectList = (props) => {
     const createList = () => {
@@ -13,7 +13,7 @@ const ProjectList = (props) => {
             if (item?.cursus_ids[0] != 21) return;
             index++;
             return (
-                <Project key={index} project={item}/>
+                <ProjectCard key={index} project={item}/>
             )
         })
     }
