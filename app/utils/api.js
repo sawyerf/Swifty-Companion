@@ -6,21 +6,44 @@ import { API_UID, API_SECRET } from '@env';
 axios.defaults.baseURL = 'https://api.intra.42.fr/';
 
 const getData = async () => {
+    console.log('Get Data');
+    let value;
+
     try {
-        const value = await AsyncStorage.getItem('token')
+        value = await AsyncStorage.getItem('token')
         if (value !== null) {
             axios.defaults.headers.common["Authorization"] = 'Bearer ' + value;
-            console.log('Set save Token');
+            console.log('Set save Token:', value);
         }
     } catch (e) {
-        console.log(e);
+        console.log('api', e);
     }
 }
 
 getData();
 
+const checkToken = async () => {
+    let res;
+
+    console.log('Check Orginal Token');
+    try {
+        res = await axios.get('/oauth/token/info')
+    } catch (error) {
+        console.log('error:', 'CheckToken:', error);
+        console.log(error?.response?.data)
+        return false;
+    }
+    console.log(res.data);
+    if (res?.data?.expires_in_seconds > 10) {
+        return true;
+    }
+    return false;
+}
+
 const getToken = async (code) => {
     let res;
+    
+    console.log('Get Token');
     try {
         res = await axios.post('/oauth/token',
             {
@@ -32,7 +55,8 @@ const getToken = async (code) => {
             }
         );
     } catch (error) {
-        console.log('error', error);
+        console.log('error:', 'getToken', ':', error);
+        console.log(error?.response?.data)
         return null;
     }
     const token = res.data.access_token;
@@ -42,19 +66,6 @@ const getToken = async (code) => {
     return token;
 }
 
-const getMe = async () => {
-    console.log('getMe');
-    let res;
-    try {
-        res = await axios.get('/v2/me');
-    } catch (error) {
-        console.log('error', error);
-        return null;
-    }
-    // console.log('me', JSON.stringify(res.data, null, 2));
-    return (res.data);
-}
-
 const get = async (url, params) => {
     console.log('get', url);
     let res;
@@ -62,15 +73,21 @@ const get = async (url, params) => {
         res = await axios.get(url, params);
     } catch (error) {
         console.log('error', error);
+        console.log(error?.response?.data)
+        if (error?.response?.data?.message == 'The access token expired') {
+            const code = await AsyncStorage.getItem('code');
+            if (getToken(code)) {
+                return get(url, params);
+            }
+        }
         return null;
     }
     // console.log('get', JSON.stringify(res.data));
     return (res.data);
 }
 
-
 export default {
     getToken,
-    getMe,
     get,
+    checkToken,
 }

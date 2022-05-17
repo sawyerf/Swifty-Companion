@@ -19,16 +19,6 @@ const Search = ({navigation}) => {
         // });
     }
 
-    const getMe = async () => {
-        if (!user) {
-            setUser(await api.get('/v2/me'));
-        }
-    }
-
-    React.useEffect(() => {
-        getMe();
-    })
-
     return (
         <View style={styles.container}>
             <TextInput
@@ -37,10 +27,6 @@ const Search = ({navigation}) => {
                 value={search}
                 onSubmitEditing={onPressSearch}
             />
-            <Text>
-                {user?.displayname}
-
-            </Text>
             <StatusBar style="auto" />
         </View>
     );

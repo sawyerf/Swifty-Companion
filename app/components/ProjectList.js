@@ -7,11 +7,13 @@ import Project from './Project';
 
 const ProjectList = (props) => {
     const createList = () => {
+        let index = 0;
         return props.projects?.map((item) => {
             if (item?.status != 'finished') return;
             if (item?.cursus_ids[0] != 21) return;
+            index++;
             return (
-                <Project project={item}/>
+                <Project key={index} project={item}/>
             )
         })
     }

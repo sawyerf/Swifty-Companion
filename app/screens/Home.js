@@ -29,44 +29,79 @@ const Home = ({ navigation, route }) => {
         discovery
     );
 
+    const getStorage = async (key) => {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            return value;
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
     React.useEffect(() => {
-        const getData = async () => {
-            try {
-                const valueCode = await AsyncStorage.getItem('code')
-                const valueToken = await AsyncStorage.getItem('token')
-                if (valueCode !== null) {
-                    setCode(valueCode);
+        const checkCode = async () => {
+            console.log('Check Code 1');
+            if (!code) {
+                const res = await getStorage('code');
+                if (res) {
+                    setCode(res);
+                    return;
                 }
-                if (valueToken !== null) {
-                    setToken(valueToken);
+                // await promptAsync();
+            }
+            if (code && !await api.checkToken()) {
+                console.log('Cleat bir')
+                await AsyncStorage.removeItem('token');
+                if (token === undefined) {
+                    setToken(null);
+                } else {
+                    setToken(undefined);
                 }
-            } catch (e) {
-                console.log(e);
             }
         }
-        getData()
-    });
+        checkCode();
+    }, [code])
 
     React.useEffect(() => {
-        if (!code) {
-            promptAsync();
-            setToken(undefined);
-            AsyncStorage.setItem('token', undefined)
+        const checkToken = async () => {
+            console.log('Check Token 1');
+            if (!token) {
+                const res = await getStorage('token');
+                if (res) {
+                    setToken(res);
+                    return;
+                }
+                if (code) {
+                    const res_token = await api.getToken(code);
+                    if (!res_token) {
+                        await AsyncStorage.removeItem('code');
+                        setCode(undefined);
+                    } else {
+                        await AsyncStorage.setItem('token', res_token);
+                        setToken(res_token);
+                    }
+                }
+                return;
+            }
+            if (code && token) {
+                navigation.navigate('Profil', { uid: RANDOM_USER });
+            }
         }
-        if (!token) {
-            api.getToken(code);
-        }
-        if (code && token) {
-            navigation.navigate('Profil', { uid: RANDOM_USER });
-        }
-    }, [code, token])
+        checkToken();
+    }, [token])
 
     React.useEffect(() => {
-        if (response?.type === 'success') {
-            setCode(response.params.code);
-            AsyncStorage.setItem('code', response.params.code);
-            console.log('code', code);
+        const getReponse = async () => {
+            if (response?.type === 'success') {
+                await AsyncStorage.setItem('code', response.params.code);
+                await AsyncStorage.removeItem('token');
+                await setCode(response.params.code);
+                await setToken(undefined);
+                console.log('code', response.params.code);
+            }
         }
+        getReponse();
     }, [response]);
 
     return (
@@ -83,15 +118,22 @@ const Home = ({ navigation, route }) => {
             <Button
                 disabled={!request}
                 title="Connect"
-                onPress={() => { promptAsync(); }}
+                onPress={async () => { await promptAsync() }}
             />
-            <Button
+            {/* <Button
                 title="Get Token"
                 onPress={async () => { await api.getToken(code); }}
-            />
-            <Button
+            /> */}
+            {/* <Button
                 title="Profil"
                 onPress={() => { navigation.navigate('Profil', { uid: RANDOM_USER }); }}
+            /> */}
+            <Button
+                title="Clear"
+                onPress={() => {
+                    AsyncStorage.removeItem('code');
+                    AsyncStorage.removeItem('token');
+                }}
             />
         </View>
     );
