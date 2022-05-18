@@ -1,13 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { Text, View, Button } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../utils/api';
 
+import api from '../utils/api';
 import { API_UID } from '@env';
-import { useEffect } from 'react/cjs/react.production.min';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -17,7 +15,6 @@ const discovery = {
 
 const Home = ({ navigation, route }) => {
     const [code, setCode] = React.useState();
-    // const [token, setToken] = React.useState();
 
     const [request, response, promptAsync] = useAuthRequest(
         {
@@ -64,7 +61,6 @@ const Home = ({ navigation, route }) => {
                 }
             }
             console.log('setToken', currrentToken);
-            // setToken(currrentToken);
             if (code && currrentToken) {
                 navigation.replace('Search');
             }
@@ -85,26 +81,17 @@ const Home = ({ navigation, route }) => {
     }, [response]);
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
             <Text>
                 Click to connect to intra
             </Text>
             <Button
                 disabled={!request}
                 title="Connect"
-                onPress={() => {promptAsync()}}
+                onPress={() => { promptAsync() }}
             />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
 
 export default Home;

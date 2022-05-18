@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+
 import api from '../utils/api';
 import ProjectList from '../components/ProjectList';
 import SkillList from '../components/SkillList';

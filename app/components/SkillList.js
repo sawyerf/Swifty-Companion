@@ -1,8 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import api from '../utils/api';
-import { AuthError } from 'expo-auth-session';
+import { Text, View } from 'react-native';
 import getIndex from '../utils';
 
 const SkillList = (props) => {
@@ -51,6 +48,5 @@ const SkillList = (props) => {
         </View>
     );
 }
-
 
 export default SkillList;

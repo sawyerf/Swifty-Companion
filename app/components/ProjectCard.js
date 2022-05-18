@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { Text, View } from 'react-native';
 import api from '../utils/api';
-import { AuthError } from 'expo-auth-session';
 
 const ProjectCard = (props) => {
     const [projectInfo, setProjectInfo] = React.useState();

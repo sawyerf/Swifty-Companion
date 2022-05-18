@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import { Text, View } from 'react-native';
 
 const LevelCard = (props) => {
     const [levelP, setLevelP] = React.useState('0%');

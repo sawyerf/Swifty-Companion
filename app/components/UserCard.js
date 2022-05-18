@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import { Text, View, Image } from 'react-native';
 
 const UserCard = (props) => {
     const [user, setUser] = React.useState();
@@ -22,9 +22,9 @@ const UserCard = (props) => {
 
     return (
         <View>
-            <View style={styles.conTop}>
+            <View style={{ flexDirection: 'row', width: '100%', backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'flex-start', padding: 10, marginVertical: 5 }}>
                 <Image
-                    style={styles.profilImage}
+                    style={{ width: 100, height: 100, borderRadius: 100 / 2, marginRight: 10 }}
                     source={{
                         uri: user?.image_url
                     }}
@@ -70,23 +70,5 @@ const UserCard = (props) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    conTop: {
-        flexDirection: 'row',
-        width: '100%',
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: 10,
-        marginVertical: 5,
-    },
-    profilImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 100 / 2,
-        marginRight: 10
-    },
-});
 
 export default UserCard;
