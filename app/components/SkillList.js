@@ -27,11 +27,7 @@ const SkillList = (props) => {
     }, [props.skill]);
 
     const makeChart = () => {
-        let index = 0;
-
-        console.log(index);
         return props.skill?.skills?.map((item) => {
-            index++;
             return (
                 <View onTouchStart={() => {
                         setSelect(item);

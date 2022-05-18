@@ -4,10 +4,7 @@ import getIndex from '../utils';
 
 const SearchList = (props) => {
     const makeList = () => {
-        let index = 0;
-
         return (props?.users?.map((item) => {
-            index++;
             return (
                 <View
                     key={getIndex()}

@@ -6,7 +6,7 @@ import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../utils/api';
 
-import { API_UID, RANDOM_USER } from '@env';
+import { API_UID } from '@env';
 import { useEffect } from 'react/cjs/react.production.min';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -17,7 +17,7 @@ const discovery = {
 
 const Home = ({ navigation, route }) => {
     const [code, setCode] = React.useState();
-    const [token, setToken] = React.useState();
+    // const [token, setToken] = React.useState();
 
     const [request, response, promptAsync] = useAuthRequest(
         {
@@ -42,47 +42,35 @@ const Home = ({ navigation, route }) => {
 
     React.useEffect(() => {
         const checkCode = async () => {
-            console.log('Check Code 1');
             if (!code) {
                 const resCode = await getStorage('code');
                 console.log('setCode', resCode);
                 if (resCode) {
                     setCode(resCode);
-                    return;
                 }
             }
         }
         checkCode();
-    }, [code]);
+    });
 
     React.useEffect(() => {
         const checkToken = async () => {
-            console.log('Check Token 1');
-            if (!token) {
-                const res = await getStorage('token');
-                if (res) {
-                    console.log('setToken', res);
-                    setToken(res);
-                    return;
+            let currrentToken = await getStorage('token');
+            if (!currrentToken && code) {
+                currrentToken = await api.getToken(code);
+                if (!currrentToken) {
+                    await AsyncStorage.removeItem('code');
+                    setCode(undefined);
                 }
-                if (code) {
-                    const res_token = await api.getToken(code);
-                    if (!res_token) {
-                        await AsyncStorage.removeItem('code');
-                        setCode(undefined);
-                    } else {
-                        await AsyncStorage.setItem('token', res_token);
-                        setToken(res_token);
-                    }
-                }
-                return;
             }
-            if (code && token) {
-                navigation.navigate('Profil', { uid: RANDOM_USER });
+            console.log('setToken', currrentToken);
+            // setToken(currrentToken);
+            if (code && currrentToken) {
+                navigation.replace('Search');
             }
         }
         checkToken();
-    }, [token, code])
+    }, [code])
 
     React.useEffect(() => {
         const getReponse = async () => {
@@ -90,8 +78,7 @@ const Home = ({ navigation, route }) => {
                 await AsyncStorage.setItem('code', response.params.code);
                 await AsyncStorage.removeItem('token');
                 await setCode(response.params.code);
-                await setToken(undefined);
-                console.log('code', response.params.code);
+                console.log('setCode2', response.params.code);
             }
         }
         getReponse();
@@ -102,43 +89,11 @@ const Home = ({ navigation, route }) => {
             <Text>
                 Click to connect to intra
             </Text>
-            <Text>
-                {code}
-            </Text>
-            <Text>
-                {token}
-            </Text>
             <Button
                 disabled={!request}
                 title="Connect"
-                onPress={async () => { await promptAsync() }}
+                onPress={() => {promptAsync()}}
             />
-            {/* <Button
-                title="Get Token"
-                onPress={async () => { await api.getToken(code); }}
-            />
-            <Button
-                title="Refresh Token"
-                onPress={async () => {
-                    const refreshToken = await AsyncStorage.getItem('refresh_token');
-                    await api.upToken(refreshToken);
-                }}
-            /> */}
-            <Button
-                title="Profil"
-                onPress={() => { navigation.navigate('Profil', { uid: 40321 }); }}
-            />
-            <Button
-                title="Search"
-                onPress={() => { navigation.navigate('Search', {}); }}
-            />
-            {/* <Button
-                title="Clear"
-                onPress={() => {
-                    AsyncStorage.removeItem('code');
-                    AsyncStorage.removeItem('token');
-                }}
-            /> */}
         </View>
     );
 }

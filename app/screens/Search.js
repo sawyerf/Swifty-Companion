@@ -4,17 +4,22 @@ import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import SearchList from '../components/SearchList';
 
+import { RANDOM_USER } from '@env';
+
 const Search = ({navigation}) => {
-    const [search, onChangeSearch] = React.useState("ala");
+    const [search, onChangeSearch] = React.useState(RANDOM_USER);
     const [users, setUsers] = React.useState();
     const [timeout, setVarTimeout] = React.useState();
 
     const onPressSearch = async () => {
         const res = await searchUser();
 
-        if (res.length == 1) {
-            navigation.navigate('Profil', {uid: res[0].id});
+        if (!res.length) return ;
+        let selectUser = res.filter((item) => { return item.login == search });
+        if (!selectUser.length) {
+            selectUser = res;
         }
+        navigation.navigate('Profil', {uid: selectUser[0].id});
     }
 
     const searchUser = async () => {
@@ -42,7 +47,6 @@ const Search = ({navigation}) => {
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeSearch}
-                on
                 value={search}
                 onSubmitEditing={onPressSearch}
             />

@@ -55,7 +55,7 @@ const Profil = ({ navigation, route }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, backgroundColor: '#f1f1f1', alignItems: 'center', paddingVertical: 10 }}>
             <ScrollView style={{ width: '100%' }}>
                 <UserCard
                     user={user}
@@ -69,29 +69,5 @@ const Profil = ({ navigation, route }) => {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f1f1f1',
-        alignItems: 'center',
-        paddingVertical: 10,
-    },
-    conTop: {
-        flexDirection: 'row',
-        width: '100%',
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: 10,
-        marginVertical: 5,
-    },
-    profilImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 100 / 2,
-        marginRight: 10
-    },
-});
 
 export default Profil;

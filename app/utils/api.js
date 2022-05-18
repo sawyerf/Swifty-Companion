@@ -33,7 +33,6 @@ const checkToken = async () => {
         console.log(error?.response?.data)
         return false;
     }
-    console.log(res.data);
     if (res?.data?.expires_in_seconds > 10) {
         return true;
     }
@@ -61,7 +60,6 @@ const getToken = async (code) => {
     }
     const token = res.data.access_token;
     console.log('token', token);
-    console.log(res?.data)
     axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('refresh_token', res?.data?.refresh_token);
@@ -72,13 +70,6 @@ const upToken = async (refreshToken) => {
     let res;
 
     console.log('Refresh Token');
-    console.log({
-        grant_type: 'refresh_token',
-        client_id: API_UID,
-        client_secret: API_SECRET,
-        refresh_token: refreshToken,
-        redirect_uri: 'com.swiftycompanion://oauth'
-    });
     try {
         res = await axios.post('/oauth/token',
             {
@@ -96,7 +87,6 @@ const upToken = async (refreshToken) => {
     }
     const token = res.data.access_token;
     console.log('token', token);
-    console.log(res?.data)
     axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('refresh_token', res?.data?.refresh_token);
@@ -111,7 +101,6 @@ const get = async (url, params) => {
     } catch (error) {
         console.log('error', error);
         console.log(error?.response?.data)
-        console.log(error?.response?.status);
         if (error?.response?.status === 401) {
             const refreshToken = await AsyncStorage.getItem('refresh_token');
             if (await upToken(refreshToken)) {
@@ -120,7 +109,6 @@ const get = async (url, params) => {
         }
         return null;
     }
-    // console.log('get', JSON.stringify(res.data));
     return (res.data);
 }
 

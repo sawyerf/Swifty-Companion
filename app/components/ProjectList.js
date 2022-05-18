@@ -8,9 +8,7 @@ import getIndex from '../utils';
 
 const ProjectList = (props) => {
     const createList = () => {
-        let index = 0;
         return props.projects?.map((item) => {
-            index++;
             return (
                 <ProjectCard key={getIndex()} project={item} />
             )
