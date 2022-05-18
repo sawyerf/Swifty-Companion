@@ -93,6 +93,10 @@ const upToken = async (refreshToken) => {
     return token;
 }
 
+const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
 const get = async (url, params) => {
     console.log('get', url);
     let res;
@@ -106,6 +110,9 @@ const get = async (url, params) => {
             if (await upToken(refreshToken)) {
                 return await get(url, params);
             }
+        } else if (error?.response?.status === 429) {
+            await sleep(1000);
+            return await get(url, params);
         }
         return null;
     }

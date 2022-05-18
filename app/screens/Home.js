@@ -62,7 +62,7 @@ const Home = ({ navigation, route }) => {
             }
             console.log('setToken', currrentToken);
             if (code && currrentToken) {
-                navigation.replace('Search');
+                navigation.replace('Me');
             }
         }
         checkToken();
