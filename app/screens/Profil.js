@@ -8,8 +8,9 @@ import SkillList from '../components/SkillList';
 
 const Profil = ({ navigation, route }) => {
     const [user, setUser] = React.useState();
-    const [userCursus, setUserCursus] = React.useState(0);
-    const [levelP, setLevelP] = React.useState('10%');
+    const [userCursus, setUserCursus] = React.useState();
+    const [levelP, setLevelP] = React.useState('0%');
+    const [projects, setProjects] = React.useState();
 
     React.useEffect(() => {
         if (!user) {
@@ -32,19 +33,43 @@ const Profil = ({ navigation, route }) => {
 
     const getCursus = () => {
         if (user?.cursus_users?.length > 0) {
-            for (const cursus of user.cursus_users) {
-                if (cursus.cursus_id == 21) {
-                    setUserCursus(cursus);
-                    setLevelP(levelToP(cursus.level));
-                    return cursus;
-                }
+            let selectCursus;
+            selectCursus = user?.cursus_users.filter((item) => {return item.cursus_id == user?.projects_users[0]?.cursus_ids[0]})[0];
+            if (!selectCursus) {
+                selectCursus = user.cursus_users[0];
             }
+            setUserCursus(selectCursus);
+            setLevelP(levelToP(selectCursus.level));
+            setProjects(user?.projects_users.filter((item) => {
+                if (item?.status != 'finished') return false;
+                if (item?.cursus_ids[0] != selectCursus.cursus_id) return false;
+                return true;
+            }))
+            return selectCursus;
         }
         return null;
     }
 
+    const changeCursus = () => {
+        if (user?.cursus_users?.length > 1) {
+            let selectCursus;
+
+            const indexCurrent = user.cursus_users.indexOf(userCursus);
+            const index = (indexCurrent + 1) % user.cursus_users.length;
+            selectCursus = user.cursus_users[index];
+            setUserCursus(selectCursus);
+            setLevelP(levelToP(selectCursus.level));
+            setProjects(user?.projects_users.filter((item) => {
+                if (item?.status != 'finished') return false;
+                if (item?.cursus_ids[0] != selectCursus.cursus_id) return false;
+                return true;
+            }))
+            return selectCursus;
+        }
+    }
+
     const levelToP = (levelI) => {
-        console.log('levelToP');
+        // console.log('levelToP');
         if (!levelI) {
             return '0%';
         }
@@ -53,7 +78,7 @@ const Profil = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <ScrollView style={{width: '100%'}}>
                 <View style={styles.conTop}>
                     <Image
                         style={styles.profilImage}
@@ -69,6 +94,11 @@ const Profil = ({ navigation, route }) => {
                             @{user?.login}
                         </Text>
                     </View>
+                    <Text
+                        onPress={changeCursus} 
+                        style={{ position: 'absolute', right: 10, top: 10, fontSize: 13, backgroundColor: '#f6f6f6', padding: 5 }}>
+                        🏫 {userCursus?.cursus?.name}
+                    </Text>
                 </View>
                 <View style={{ width: '100%', paddingVertical: 10, paddingHorizontal: 13, backgroundColor: '#ffffff', marginBottom: 7 }}>
                     <View style={{ flexDirection: 'row', marginBottom: 4 }}>
@@ -96,14 +126,10 @@ const Profil = ({ navigation, route }) => {
                     <View style={{ backgroundColor: '#c5c5c5', position: 'absolute', width: levelP, height: '100%', borderTopStartRadius: 13, borderBottomStartRadius: 13, left: 10 }} />
                     <Text style={{ width: '100%', height: '100%', position: 'absolute', textAlign: 'center', textAlignVertical: 'center' }}>{userCursus?.level}</Text>
                 </View>
-                <ScrollView
-                    style={{ height: 150 }}
-                    horizontal={true}>
-                    <ProjectList projects={user?.projects_users} />
-                </ScrollView>
-                <SkillList skill={userCursus}/>
-                <StatusBar style="auto" />
+                <ProjectList projects={projects} />
+                <SkillList skill={userCursus} />
             </ScrollView>
+            <StatusBar style="auto" />
         </View>
     );
 }
@@ -113,7 +139,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f1f1f1',
         alignItems: 'center',
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     conTop: {
         flexDirection: 'row',
@@ -122,7 +148,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: 10,
-        margin: 5
+        marginVertical: 5,
     },
     profilImage: {
         width: 100,

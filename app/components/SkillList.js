@@ -38,7 +38,7 @@ const SkillList = (props) => {
 
     return (
         <View style={{ paddingHorizontal: 8, marginTop: 7 }}>
-            <View style={{ width: '100%', height: 10, backgroundColor: 'green', flexDirection: 'row' }}>
+            <View style={{ width: '100%', height: 10, flexDirection: 'row' }}>
                 {makeChart()}
             </View>
             <View style={{marginTop: 7, marginStart: 10, flexDirection: 'row', alignItems: 'center'}}>

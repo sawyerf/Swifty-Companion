@@ -8,20 +8,29 @@ import ProjectCard from './ProjectCard';
 const ProjectList = (props) => {
     const createList = () => {
         let index = 0;
+        // if (!props?.projects?.length) {
+        //     return (
+        //         <Text>
+        //             No project
+        //         </Text>
+        //     )
+        // }
         return props.projects?.map((item) => {
-            if (item?.status != 'finished') return;
-            if (item?.cursus_ids[0] != 21) return;
             index++;
             return (
-                <ProjectCard key={index} project={item}/>
+                <ProjectCard key={index} project={item} />
             )
         })
     }
 
     return (
-        <View style={{ width: '100%', height: 150, flexDirection: 'row' }}>
-            {createList()}
-        </View>
+        <ScrollView
+            style={{ width: '100%', height: 150 }}
+            horizontal={true}>
+            <View style={{ width: '100%', height: 150, flexDirection: 'row' }}>
+                {createList()}
+            </View>
+        </ScrollView>
     );
 }
 

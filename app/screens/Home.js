@@ -133,7 +133,11 @@ const Home = ({ navigation, route }) => {
             />
             <Button
                 title="Profil"
-                onPress={() => { navigation.navigate('Profil', { uid: RANDOM_USER }); }}
+                onPress={() => { navigation.navigate('Profil', { uid: 40321 }); }}
+            />
+            <Button
+                title="Search"
+                onPress={() => { navigation.navigate('Search', {}); }}
             />
             <Button
                 title="Clear"
