@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 're
 import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
+import getIndex from '../utils';
 
 const SkillList = (props) => {
     const [select, setSelect] = React.useState();
@@ -17,19 +18,25 @@ const SkillList = (props) => {
         return (String((xp * 100) / level) + '%');
     }
 
+    React.useEffect(() => {
+        if (props.skill?.skills.length) {
+            setSelect(props.skill?.skills[0]);
+        } else {
+            setSelect(undefined);
+        }
+    }, [props.skill]);
+
     const makeChart = () => {
         let index = 0;
 
+        console.log(index);
         return props.skill?.skills?.map((item) => {
             index++;
-            if (!select) {
-                setSelect(item);
-            }
             return (
                 <View onTouchStart={() => {
                         setSelect(item);
                     }}
-                    key={index}
+                    key={getIndex()}
                     style={{ width: calcSize(item.level), height: '100%', backgroundColor: colors[item.id] }}
                 />
             );

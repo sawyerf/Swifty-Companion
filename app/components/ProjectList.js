@@ -4,21 +4,15 @@ import { StatusBar } from 'expo-status-bar';
 import api from '../utils/api';
 import { AuthError } from 'expo-auth-session';
 import ProjectCard from './ProjectCard';
+import getIndex from '../utils';
 
 const ProjectList = (props) => {
     const createList = () => {
         let index = 0;
-        // if (!props?.projects?.length) {
-        //     return (
-        //         <Text>
-        //             No project
-        //         </Text>
-        //     )
-        // }
         return props.projects?.map((item) => {
             index++;
             return (
-                <ProjectCard key={index} project={item} />
+                <ProjectCard key={getIndex()} project={item} />
             )
         })
     }

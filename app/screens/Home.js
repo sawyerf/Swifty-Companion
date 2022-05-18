@@ -6,7 +6,8 @@ import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../utils/api';
 
-import { API_UID, API_SECRET, RANDOM_USER } from '@env';
+import { API_UID, RANDOM_USER } from '@env';
+import { useEffect } from 'react/cjs/react.production.min';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -43,24 +44,16 @@ const Home = ({ navigation, route }) => {
         const checkCode = async () => {
             console.log('Check Code 1');
             if (!code) {
-                const res = await getStorage('code');
-                console.log('setCode', res);
-                if (res) {
-                    setCode(res);
+                const resCode = await getStorage('code');
+                console.log('setCode', resCode);
+                if (resCode) {
+                    setCode(resCode);
                     return;
                 }
             }
-            // if (code && !await api.checkToken()) {
-            //     await AsyncStorage.removeItem('token');
-            //     if (token === undefined) {
-            //         setToken(null);
-            //     } else {
-            //         setToken(undefined);
-            //     }
-            // }
         }
         checkCode();
-    }, [code])
+    }, [code]);
 
     React.useEffect(() => {
         const checkToken = async () => {
@@ -120,7 +113,7 @@ const Home = ({ navigation, route }) => {
                 title="Connect"
                 onPress={async () => { await promptAsync() }}
             />
-            <Button
+            {/* <Button
                 title="Get Token"
                 onPress={async () => { await api.getToken(code); }}
             />
@@ -130,7 +123,7 @@ const Home = ({ navigation, route }) => {
                     const refreshToken = await AsyncStorage.getItem('refresh_token');
                     await api.upToken(refreshToken);
                 }}
-            />
+            /> */}
             <Button
                 title="Profil"
                 onPress={() => { navigation.navigate('Profil', { uid: 40321 }); }}
@@ -139,13 +132,13 @@ const Home = ({ navigation, route }) => {
                 title="Search"
                 onPress={() => { navigation.navigate('Search', {}); }}
             />
-            <Button
+            {/* <Button
                 title="Clear"
                 onPress={() => {
                     AsyncStorage.removeItem('code');
                     AsyncStorage.removeItem('token');
                 }}
-            />
+            /> */}
         </View>
     );
 }

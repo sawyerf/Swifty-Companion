@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Image, ScrollView } from 'react-native';
+import getIndex from '../utils';
 
 const SearchList = (props) => {
     const makeList = () => {
@@ -9,7 +10,7 @@ const SearchList = (props) => {
             index++;
             return (
                 <View
-                    key={index}
+                    key={getIndex()}
                     style={{ flexDirection: 'row', marginHorizontal: 10, paddingVertical: 9, borderBottomWidth: 1, borderColor: '#d9d9d9' }}
                     onTouchEnd={() => {
                         props.navigation.navigate('Profil', {uid: item?.id});
