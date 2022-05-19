@@ -6,6 +6,7 @@ import api from '../utils/api';
 import UserCard from '../components/UserCard';
 import LevelCard from '../components/LevelCard';
 import ProjectList from '../components/ProjectList';
+import SlotList from '../components/SlotList';
 
 const Me = ({ navigation }) => {
     const [user, setUser] = React.useState();
@@ -58,12 +59,16 @@ const Me = ({ navigation }) => {
 
     return (
         <View>
-            <UserCard
-                user={user}
-                cursus={{ cursus: userCursus, set: setUserCursus }}
-            />
-            <LevelCard cursus={userCursus} />
-            <ProjectList projects={projects} />
+            <ScrollView>
+                <UserCard
+                    user={user}
+                    cursus={{ cursus: userCursus, set: setUserCursus }}
+                />
+                <LevelCard cursus={userCursus} />
+                <ProjectList projects={projects} />
+                <SlotList />
+                <StatusBar style="auto" />
+            </ScrollView>
         </View>
     )
 }

@@ -8,10 +8,10 @@ const ButtonHeader = (props) => {
             <Pressable
                 onPress={() => { props.navigation.navigate('Search') }}
                 style={{
-                    padding: 10
+                    padding: 10,
                 }}
             >
-                <Text>🔎</Text>
+                <Text style={{ fontSize: 17 }}>🔎</Text>
             </Pressable>
             <Pressable
                 onPress={async () => {
@@ -24,7 +24,7 @@ const ButtonHeader = (props) => {
                     padding: 10
                 }}
             >
-                <Text>🚪</Text>
+                <Text style={{ fontSize: 17 }}>🚪</Text>
             </Pressable>
         </View>
     );

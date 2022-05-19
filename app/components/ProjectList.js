@@ -23,4 +23,4 @@ const ProjectList = (props) => {
     );
 }
 
-export default ProjectList
+export default ProjectList;

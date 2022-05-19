@@ -7,7 +7,7 @@ import SearchList from '../components/SearchList';
 import { RANDOM_USER } from '@env';
 
 const Search = ({ navigation }) => {
-    const [search, onChangeSearch] = React.useState(RANDOM_USER);
+    const [search, onChangeSearch] = React.useState();
     const [users, setUsers] = React.useState();
     const [timeout, setVarTimeout] = React.useState();
 
@@ -45,9 +45,10 @@ const Search = ({ navigation }) => {
     return (
         <View style={{ flex: 1, backgroundColor: '#fff', padding: 5 }}>
             <TextInput
-                style={{ height: 40, width: '100%', padding: 10, borderWidth: 1, textAlign: 'center', borderRadius: 7 }}
+                style={{ height: 40, width: '100%', padding: 10, borderWidth: 1, textAlign: 'center', borderRadius: 7, marginBottom: 5 }}
                 onChangeText={onChangeSearch}
                 value={search}
+                autoFocus={true}
                 onSubmitEditing={onPressSearch}
             />
             <SearchList users={users} navigation={navigation} />

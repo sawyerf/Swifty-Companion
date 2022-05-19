@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import api from '../utils/api';
 import { API_UID } from '@env';
+import { StatusBar } from 'expo-status-bar';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -90,6 +91,7 @@ const Home = ({ navigation, route }) => {
                 title="Connect"
                 onPress={() => { promptAsync() }}
             />
+            <StatusBar style="auto" />
         </View>
     );
 }

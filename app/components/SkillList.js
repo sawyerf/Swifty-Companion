@@ -21,7 +21,7 @@ const SkillList = (props) => {
         } else {
             setSelect(undefined);
         }
-    }, [props.skill]);
+    }, [props.skill?.skills]);
 
     const makeChart = () => {
         return props.skill?.skills?.map((item) => {

@@ -13,7 +13,7 @@ const SearchList = (props) => {
                         props.navigation.navigate('Profil', {uid: item?.id});
                     }}>
                     <Image
-                        style={{ width: 20, height: 20, borderRadius: 10 }}
+                        style={{ width: 20, height: 20, borderRadius: 10, marginEnd: 7 }}
                         source={{uri: 'https://cdn.intra.42.fr/users/small_' + item?.login + '.jpg' }}
                     />
                     <Text style={{ marginEnd: 5 }}>

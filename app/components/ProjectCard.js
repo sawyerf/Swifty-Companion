@@ -16,9 +16,10 @@ const ProjectCard = (props) => {
     }
 
     const emojiMark = (project) => {
-        if (project?.final_mark === null) return '🚧';
-        if (project['validated?']) return '⭐';
-        if (project?.final_mark >= 0 && !project['validated?']) return '❌';
+        if (!project) return '';
+        if (project["validated?"]) return '⭐ ';
+        if (!project?.marked) return '🚧 ';
+        if (project?.final_mark >= 0 && !project['validated?']) return '❌ ';
     }
 
     return (
@@ -26,7 +27,7 @@ const ProjectCard = (props) => {
             <Text style={{ position: 'relative', fontWeight: 'bold' }}>{props?.project?.project?.name}</Text>
             <Text style={{ position: 'relative' }} numberOfLines={3}>{projectInfo?.project_sessions[0]?.description}</Text>
             <View style={{ position: 'relative', marginTop: 'auto', flexDirection: 'row' }}>
-                <Text>{props?.project?.final_mark != null ? '⭐ ' : '🚧' }{props?.project?.final_mark}</Text>
+                <Text>{ emojiMark(props?.project) }{props?.project?.final_mark}</Text>
                 <Text onTouchStart={getProject} style={{ position: 'relative', marginStart: 'auto' }}>{projectInfo ? "⏱️ ": "➕"} {projectInfo?.project_sessions[0]?.estimate_time}</Text>
             </View>
         </View>
