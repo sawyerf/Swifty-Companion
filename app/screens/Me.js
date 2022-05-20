@@ -56,7 +56,6 @@ const Me = ({ navigation }) => {
         return null;
     }
 
-
     return (
         <View>
             <ScrollView>

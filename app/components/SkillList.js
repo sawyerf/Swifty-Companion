@@ -12,7 +12,7 @@ const SkillList = (props) => {
             level += item.level;
         });
 
-        return (String((xp * 100) / level) + '%');
+        return (String(((xp * 100) / level).toFixed(2)) + '%');
     }
 
     React.useEffect(() => {
@@ -43,7 +43,10 @@ const SkillList = (props) => {
             </View>
             <View style={{marginTop: 7, marginStart: 10, flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{ width: 10, height: 10, backgroundColor: colors[select?.id] }} />
-                <Text> {select?.name} {select?.level} </Text>
+                { select
+                    ? <Text> {select?.name}  ꞏ  {select?.level?.toFixed(2)}  ꞏ  {calcSize(select?.level)} </Text>
+                    : <></>
+                }
             </View>
         </View>
     );

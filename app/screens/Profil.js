@@ -28,7 +28,7 @@ const Profil = ({ navigation, route }) => {
     React.useEffect(() => {
         if (userCursus) {
             setProjects(user?.projects_users.filter((item) => {
-                if (item?.status != 'finished') return false;
+                // if (item?.status != 'finished') return false;
                 if (item?.cursus_ids[0] != userCursus.cursus_id) return false;
                 return true;
             }));
