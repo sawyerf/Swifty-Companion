@@ -65,7 +65,7 @@ const Me = ({ navigation }) => {
                 />
                 <LevelCard cursus={userCursus} />
                 <ProjectList projects={projects} />
-                {/* <SlotList /> */}
+                <SlotList />
                 <StatusBar style="auto" />
             </ScrollView>
         </View>

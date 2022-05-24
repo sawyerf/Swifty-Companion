@@ -5,7 +5,6 @@ const LevelCard = (props) => {
     const [levelP, setLevelP] = React.useState('0%');
 
     const levelToP = (levelI) => {
-        // console.log('levelToP');
         if (!levelI) {
             return '0%';
         }

@@ -6,27 +6,64 @@ const SlotCard = (props) => {
     const sinceDate = () => {
         const now = new Date();
         const correc = new Date(props?.slot?.begin_at);
-
-        const since = (now - correc) / 1000;
+        const since = (correc - now) / 1000;
         const date = {};
-        date.day = Math.floor(since / 86400);
-        date.hour = Math.floor(since % 86400 / 3600);
-        date.minute = Math.floor(since % 3600 / 60);
-        date.second = Math.floor(since % 3600 % 60);
+
+        date.day = Math.trunc(since / 86400);
+        date.hour = Math.trunc(since % 86400 / 3600);
+        date.minute = Math.trunc((since % 3600) / 60);
+        date.second = Math.trunc(since % 3600 % 60);
         for (const key of ['day', 'hour', 'minute', 'second']) {
-            if (date[key] > 0) return date[key] + ' ' + key;
-            // console.log(key)
+            // console.log(key, date[key]);
+            if (date[key] != 0) {
+                return ({
+                    key: key,
+                    since: date[key]
+                })
+            }
         }
+        return ({
+            key: 'second',
+            since: 0
+        });
+    }
+
+    const formatText = () => {
+        const since = sinceDate();
+
+        return (
+            <Text style={{}}>
+                <Text style={{ color: 'blue' }}>
+                    {
+                        props.slot?.scale_team?.corrector?.login ?
+                            props.slot?.scale_team?.corrector?.login :
+                            'someone'
+                    }
+                </Text>
+                {
+                    (since?.since >= 0) ?
+                        ' will be correct by ' :
+                        ' corrected '
+                }
+                <Text style={{ color: 'blue' }}>
+                    {
+                        props.slot?.scale_team?.correcteds[0]?.login ?
+                            props.slot?.scale_team?.correcteds[0]?.login :
+                            'someone'
+                    }
+                </Text>
+                {
+                    (since?.since >= 0) ?
+                        ' in ' + since.since + ' ' + since.key + 's' :
+                        ' since ' + Math.abs(since.since) + ' ' + since.key + 's'
+                }
+            </Text>
+        )
     }
 
     return (
         <View style={{ flexDirection: 'row', marginHorizontal: 10, paddingVertical: 9, borderBottomWidth: 1, borderColor: '#d9d9d9' }}>
-            <Text style={{}}>
-                You will correct by
-                {' '}<Text style={{color: 'blue'}}>{props.slot?.scale_team?.correcteds[0]?.login ? props.slot?.scale_team?.correcteds[0]?.login : 'unknown'}</Text>
-                {' on '}<Text style={{color: 'blue'}}>{'matcha'}</Text>
-                {' in '}{sinceDate()}
-            </Text>
+            {props?.slot ? formatText() : <></>}
         </View>
     );
 }
