@@ -42,7 +42,6 @@ const checkToken = async () => {
 const getToken = async (code) => {
     let res;
 
-    console.log('Get Token');
     try {
         res = await axios.post('/oauth/token',
             {

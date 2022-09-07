@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Button } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync } from 'expo-auth-session';
+import { makeRedirectUri, useAuthRequest, useAutoDiscovery, exchangeCodeAsync, ResponseType } from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import api from '../utils/api';
@@ -23,7 +23,8 @@ const Home = ({ navigation, route }) => {
             scopes: ['public', 'projects'],
             redirectUri: makeRedirectUri({
                 native: 'com.swiftycompanion://oauth'
-            })
+            }),
+            ResponseType: 'code'
         },
         discovery
     );
